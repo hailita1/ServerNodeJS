@@ -39,8 +39,12 @@ app.get('/createTable', (req, res) => {
 
 //get all user
 app.get('/users', (req, res) => {
+    const {name} = req.query;
     let sql = "SELECT * FROM users";
-    let query = db.query(sql, (err, results) => {
+    if (name) {
+        sql += " where name LIKE ?";
+    }
+    let query = db.query(sql, [`%${name}%`], (err, results) => {
         if (err) throw err;
         res.send(results);
     });
